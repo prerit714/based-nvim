@@ -64,7 +64,9 @@ vim.pack.add({
 
 
 -- Load the vague theme
-require("vague").setup({})
+require("vague").setup({
+  transparent = true,
+})
 vim.cmd("colorscheme vague")
 
 -- Additional transparency settings (if needed)
