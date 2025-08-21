@@ -39,10 +39,7 @@ vim.pack.add({
   { src = "https://github.com/hrsh7th/nvim-cmp" },
   { src = "https://github.com/tpope/vim-fugitive" },
   { src = "https://github.com/MagicDuck/grug-far.nvim" },
-  { src = "https://github.com/echasnovski/mini.pairs" },
-  { src = "https://github.com/echasnovski/mini.pick" },
-  { src = "https://github.com/echasnovski/mini.extra" },
-  { src = "https://github.com/echasnovski/mini.comment" },
+  { src = "https://github.com/echasnovski/mini.nvim" },
   { src = "https://github.com/cbochs/grapple.nvim" },
   { src = "https://github.com/zbirenbaum/copilot.lua" },
   {
@@ -59,6 +56,9 @@ vim.pack.add({
   },
   {
     src = "https://github.com/lukas-reineke/indent-blankline.nvim",
+  },
+  {
+    src = "https://github.com/MeanderingProgrammer/render-markdown.nvim",
   }
 })
 
@@ -250,6 +250,7 @@ local filetype_settings = {
   -- Web development (2 spaces)
   javascript = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
   typescript = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
+  typescriptreact = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
   html = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
   css = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
   scss = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
@@ -313,3 +314,18 @@ for filetype, settings in pairs(filetype_settings) do
     desc = string.format("Set indentation for %s files", filetype)
   })
 end
+
+-- Setup mini.starter
+local mini_starter = require("mini.starter")
+mini_starter.setup({
+  silent = true,
+})
+
+-- Setup mini.statusline
+local mini_statusline = require("mini.statusline")
+mini_statusline.setup()
+
+-- Setup mini.icons
+local mini_icons = require("mini.icons")
+mini_icons.setup()
+
