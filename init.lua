@@ -55,9 +55,6 @@ vim.pack.add({
     src = "https://github.com/nvim-treesitter/nvim-treesitter-context",
   },
   {
-    src = "https://github.com/lukas-reineke/indent-blankline.nvim",
-  },
-  {
     src = "https://github.com/MeanderingProgrammer/render-markdown.nvim",
   }
 })
@@ -234,18 +231,6 @@ treesitter.setup({
 local treesitter_context = require("treesitter-context")
 treesitter_context.setup()
 
-local ibl = require("ibl")
-ibl.setup({
-  exclude = {
-    filetypes = {
-      "oil",
-      "lazy",
-      "help",
-      "go"
-    }
-  }
-})
-
 -- Create an autocommand group for filetype indentation
 local indent_group = vim.api.nvim_create_augroup(
   "FileTypeIndent",
@@ -336,4 +321,17 @@ mini_statusline.setup()
 local mini_icons = require("mini.icons")
 mini_icons.setup()
 
--- Setup lua_ls to include neovim runtime for good LSP
+
+-- Setup mini.files
+local mini_files = require("mini.files")
+mini_files.setup({
+  use_as_default_explorer = true,
+  windows = {
+    preview = true,
+    width_focus = 60,
+    width_nofocus = 30,
+  },
+})
+
+-- Bind <Leader>+e to open mini.files
+vim.keymap.set("n", "<leader>e", mini_files.open, { silent = true })
