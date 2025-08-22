@@ -71,11 +71,11 @@ vim.cmd("colorscheme vague")
 
 -- Additional transparency settings (if needed)
 vim.cmd [[
-        highlight Normal guibg=NONE ctermbg=NONE
-        highlight NonText guibg=NONE ctermbg=NONE
-        highlight SignColumn guibg=NONE ctermbg=NONE
-        highlight NormalFloat guibg=NONE ctermbg=NONE
-        highlight FloatBorder guibg=NONE ctermbg=NONE
+  highlight Normal guibg=NONE ctermbg=NONE
+  highlight NonText guibg=NONE ctermbg=NONE
+  highlight SignColumn guibg=NONE ctermbg=NONE
+  highlight NormalFloat guibg=NONE ctermbg=NONE
+  highlight FloatBorder guibg=NONE ctermbg=NONE
 ]]
 
 local oil = require("oil")
@@ -123,6 +123,8 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = "copilot" },
     { name = "nvim_lsp" },
+    { name = "buffer" },
+    { name = "path" },
   })
 }, {
   { name = "buffer" }
@@ -139,6 +141,9 @@ vim.keymap.set("n", "ga", vim.lsp.buf.code_action, { silent = true })
 vim.keymap.set("n", "gl", vim.lsp.codelens.run, { silent = true })
 vim.keymap.set("n", "gL", vim.lsp.codelens.refresh, { silent = true })
 vim.keymap.set("n", "g=", vim.lsp.buf.format, { silent = true })
+vim.keymap.set("n", "<leader>ih", function()
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+end, { silent = true, desc = "Toggle inlay hints" })
 
 
 -- Resize buffers when I am using more than 1
@@ -331,3 +336,4 @@ mini_statusline.setup()
 local mini_icons = require("mini.icons")
 mini_icons.setup()
 
+-- Setup lua_ls to include neovim runtime for good LSP
