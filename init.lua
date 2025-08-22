@@ -90,6 +90,7 @@ vim.lsp.enable({
   "gopls",
   "pylyzer",
   "clangd",
+  "cmake",
 })
 
 local format_local_buffer = function()
