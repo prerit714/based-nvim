@@ -180,7 +180,7 @@ grapple.setup({
   icons = false
 })
 
-vim.keymap.set("n", "<leader>m", "<cmd>Grapple toggle<cr>", { silent = true })
+vim.keymap.set("n", "<leader>m", "<cmd>Grapple tag<cr>", { silent = true })
 vim.keymap.set("n", "<leader>M", "<cmd>Grapple toggle_tags<cr>", { silent = true })
 vim.keymap.set("n", "H", "<cmd>Grapple cycle_tags prev<cr>", { silent = true })
 vim.keymap.set("n", "L", "<cmd>Grapple cycle_tags next<cr>", { silent = true })
