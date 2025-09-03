@@ -56,9 +56,15 @@ vim.pack.add({
   },
   {
     src = "https://github.com/MeanderingProgrammer/render-markdown.nvim",
-  }
+  },
+  {
+    src = "https://github.com/j-hui/fidget.nvim",
+  },
 })
 
+-- Show LSP status
+local fidget = require("fidget")
+fidget.setup({})
 
 -- Load the vague theme
 require("vague").setup({
@@ -91,6 +97,7 @@ vim.lsp.enable({
   "pylyzer",
   "clangd",
   "cmake",
+  "rust_analyzer"
 })
 
 local format_local_buffer = function()
