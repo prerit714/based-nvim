@@ -91,13 +91,15 @@ oil.setup({
 vim.keymap.set("n", "<leader>o", "<cmd>Oil<cr>")
 
 vim.lsp.enable({
-  "lua_ls",
   "vtsls",
   "gopls",
   "pylyzer",
   "clangd",
   "cmake",
-  "rust_analyzer"
+  "rust_analyzer",
+  "biome",
+  "cssls",
+  "cssmodules_ls",
 })
 
 local format_local_buffer = function()
@@ -142,16 +144,13 @@ vim.keymap.set("n", "gr", vim.lsp.buf.references, { silent = true })
 vim.keymap.set("n", "gh", vim.lsp.buf.hover, { silent = true })
 vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { silent = true })
 vim.keymap.set("n", "gR", vim.lsp.buf.rename, { silent = true })
-vim.keymap.set("n", "ga", vim.lsp.buf.code_action, { silent = true })
-vim.keymap.set("n", "gl", vim.lsp.codelens.run, { silent = true })
+vim.keymap.set("n", "gca", vim.lsp.buf.code_action, { silent = true })
+vim.keymap.set("n", "gcl", vim.lsp.codelens.run, { silent = true })
 vim.keymap.set("n", "gL", vim.lsp.codelens.refresh, { silent = true })
 vim.keymap.set("n", "g=", vim.lsp.buf.format, { silent = true })
-vim.keymap.set("n", "<leader>ih", function()
-  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-end, { silent = true, desc = "Toggle inlay hints" })
-
 
 -- Resize buffers when I am using more than 1
+---@diagnostic disable-next-line: param-type-mismatch
 vim.api.nvim_create_autocmd("VimResized", {
   pattern = "*",
   callback = function()
@@ -208,7 +207,14 @@ mason.setup()
 
 -- Setup treesitter
 local treesitter = require("nvim-treesitter.configs")
+
 treesitter.setup({
+  auto_install = false,
+  ignore_install = {},
+  parser_install_dir = nil,
+  sync_install = false,
+  modules = {},
+
   ensure_installed = {
     "lua",
     "javascript",
@@ -238,6 +244,24 @@ treesitter.setup({
 
 local treesitter_context = require("treesitter-context")
 treesitter_context.setup()
+
+-- Toggle treesitter context
+local toggle_treesitter = function()
+  if vim.g.treesitter_context_enabled == nil then
+    vim.g.treesitter_context_enabled = true
+  end
+
+  if vim.g.treesitter_context_enabled then
+    treesitter_context.disable()
+    vim.g.treesitter_context_enabled = false
+  else
+    treesitter_context.enable()
+    vim.g.treesitter_context_enabled = true
+  end
+end
+
+-- Toggle treesitter context using "leader+tc"
+vim.keymap.set("n", "<leader>tc", toggle_treesitter, { silent = true })
 
 -- Create an autocommand group for filetype indentation
 local indent_group = vim.api.nvim_create_augroup(
@@ -343,3 +367,42 @@ mini_files.setup({
 
 -- Bind <Leader>+e to open mini.files
 vim.keymap.set("n", "<leader>e", mini_files.open, { silent = true })
+
+-- Needed to do specific lsp settings
+local lsp_config = require("lspconfig")
+
+-- Let lua_ls know about neovim globals
+lsp_config.lua_ls.setup({
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { "vim", "require" },
+      },
+      workspace = {
+        library = vim.api.nvim_get_runtime_file("", true),
+        checkThirdParty = false,
+      },
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
+})
+
+-- Toggle inlay hints <Leader>+ih
+vim.keymap.set("n", "<leader>ih", function()
+  if not vim.lsp.inlay_hint.is_enabled() then
+    vim.lsp.inlay_hint.enable()
+    return
+  end
+
+  local bufnr = vim.api.nvim_get_current_buf()
+  local clients = vim.lsp.get_clients({ bufnr = bufnr })
+
+  for _, client in ipairs(clients) do
+    if client.server_capabilities.inlayHintProvider then
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+      return
+    end
+  end
+end, { silent = true })
