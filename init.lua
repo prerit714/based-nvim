@@ -100,6 +100,7 @@ vim.lsp.enable({
   "biome",
   "cssls",
   "cssmodules_ls",
+  "tailwindcss"
 })
 
 local format_local_buffer = function()
