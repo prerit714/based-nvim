@@ -369,11 +369,14 @@ mini_files.setup({
 -- Bind <Leader>+e to open mini.files
 vim.keymap.set("n", "<leader>e", mini_files.open, { silent = true })
 
--- Needed to do specific lsp settings
+-- WARN: This is giving some errors in the latest build
+-- I better stay careful dealing with this for now.
+-- Maybe in later versions devs will make it work better
+---@diagnostic disable-next-line: unused-local
 local lsp_config = require("lspconfig")
 
 -- Let lua_ls know about neovim globals
-lsp_config.lua_ls.setup({
+vim.lsp.config.lua_ls = {
   settings = {
     Lua = {
       diagnostics = {
@@ -388,7 +391,7 @@ lsp_config.lua_ls.setup({
       },
     },
   },
-})
+}
 
 -- Toggle inlay hints <Leader>+ih
 vim.keymap.set("n", "<leader>ih", function()
