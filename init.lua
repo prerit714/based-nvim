@@ -241,9 +241,9 @@ local filetype_settings = {
   -- Go (tabs)
   go = { expandtab = false, shiftwidth = 4, tabstop = 4, softtabstop = 4 },
 
-  -- C/C++ (4 spaces or tabs, depending on preference)
-  c = { expandtab = true, shiftwidth = 4, tabstop = 4, softtabstop = 4 },
-  cpp = { expandtab = true, shiftwidth = 4, tabstop = 4, softtabstop = 4 },
+  -- C/C++ (2 spaces or tabs, depending on preference)
+  c = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
+  cpp = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
 
   -- Rust (4 spaces)
   rust = { expandtab = true, shiftwidth = 4, tabstop = 4, softtabstop = 4 },
