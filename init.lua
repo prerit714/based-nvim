@@ -48,13 +48,6 @@ vim.pack.add({
   },
   { src = "https://github.com/mason-org/mason.nvim" },
   {
-    src = "https://github.com/nvim-treesitter/nvim-treesitter",
-
-  },
-  {
-    src = "https://github.com/nvim-treesitter/nvim-treesitter-context",
-  },
-  {
     src = "https://github.com/MeanderingProgrammer/render-markdown.nvim",
   },
   {
@@ -207,62 +200,18 @@ local mason = require("mason")
 mason.setup()
 
 -- Setup treesitter
-local treesitter = require("nvim-treesitter.configs")
-
-treesitter.setup({
-  auto_install = false,
-  ignore_install = {},
-  parser_install_dir = nil,
-  sync_install = false,
-  modules = {},
-
-  ensure_installed = {
-    "lua",
-    "javascript",
-    "typescript",
-    "html",
-    "css",
-    "json",
-    "python",
-    "go",
-    "rust",
-    "c",
-    "cpp",
-    "java",
-    "kotlin",
-    "templ",
-  },
-  highlight = {
-    enable = true,
-  },
-  indent = {
-    enable = true,
-  },
-  incremental_selection = {
-    enable = true,
-  },
-})
-
-local treesitter_context = require("treesitter-context")
-treesitter_context.setup()
-
--- Toggle treesitter context
-local toggle_treesitter = function()
-  if vim.g.treesitter_context_enabled == nil then
-    vim.g.treesitter_context_enabled = true
-  end
-
-  if vim.g.treesitter_context_enabled then
-    treesitter_context.disable()
-    vim.g.treesitter_context_enabled = false
-  else
-    treesitter_context.enable()
-    vim.g.treesitter_context_enabled = true
-  end
-end
-
--- Toggle treesitter context using "leader+tc"
-vim.keymap.set("n", "<leader>tc", toggle_treesitter, { silent = true })
+vim.treesitter.language.add("lua")
+vim.treesitter.language.add("javascript")
+vim.treesitter.language.add("typescript")
+vim.treesitter.language.add("html")
+vim.treesitter.language.add("css")
+vim.treesitter.language.add("json")
+vim.treesitter.language.add("python")
+vim.treesitter.language.add("go")
+vim.treesitter.language.add("rust")
+vim.treesitter.language.add("c")
+vim.treesitter.language.add("cpp")
+vim.treesitter.language.add("java")
 
 -- Create an autocommand group for filetype indentation
 local indent_group = vim.api.nvim_create_augroup(
@@ -278,8 +227,7 @@ local filetype_settings = {
   typescriptreact = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
   html = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
   css = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
-  scss = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
-  json = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
+  scss = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 }, json = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
   yaml = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
   vue = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
   svelte = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
