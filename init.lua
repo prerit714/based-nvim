@@ -26,7 +26,7 @@ vim.opt.listchars = {
 }
 
 vim.keymap.set("i", "jk", "<esc>", { silent = true })
-vim.keymap.set("i", "jk", "<esc>", { silent = true })
+vim.keymap.set("i", "kj", "<esc>", { silent = true })
 
 vim.pack.add({
   { src = "https://github.com/vague2k/vague.nvim" },
@@ -358,3 +358,7 @@ vim.keymap.set("n", "<leader>ih", function()
     end
   end
 end, { silent = true })
+
+-- Import suno
+local suno = require("suno")
+suno.setup()
