@@ -30,10 +30,10 @@ constexpr int MOD = 1e9 + 7;
   cin.tie(0); \
   cout.tie(0);
 
-#define REP(i, x, y) \
-  for (int i=(x);x<=(y);++i)
+#define REP(i,x,y) \
+  for (int i=(x);i<=(y);++i)
 
-#define REPR(i, x, y) \
+#define REPR(i,x,y) \
   for (int i=(x);i>=(y);--i)
 
 int main() {

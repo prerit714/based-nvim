@@ -1,17 +1,12 @@
 local M = {}
 
 -- Used constants in this file
-M.__SUNO = "Suno"
-M.__CP = "Cp"
+M.__SUNO = "suno"
+M.__CP = "cp"
 
 -- A table for supported filetypes
 M.__supported_filetypes = {
-  "c",
   "cpp",
-  "java",
-  "go",
-  "rs",
-  "lua",
 }
 
 ---Checks if suno supports the given filetype
@@ -44,7 +39,7 @@ M.__create_file_if_it_does_not_exist = function(filepath)
     if file then
       file:close()
     else
-      print("[Suno] I not able to create " .. filepath)
+      print("[suno] I not able to create " .. filepath)
     end
   end
 end
@@ -85,11 +80,11 @@ M.__handle_cpp = function()
     end
 
     last_save_time = current_time -- update the last save time in memory
-    print "[Suno] Compiling and running your c++ file ... :)"
+    print "[suno] Compiling and running your c++ file ... :)"
 
     -- Check if the g++ executable exists
     if vim.fn.executable "g++" == 0 then
-      print "[Suno] g++ executable was not found! ensure its installation :|"
+      print "[suno] g++ executable was not found! ensure its installation :|"
       return
     end
 
@@ -134,7 +129,7 @@ M.__handle_cpp = function()
           local size = M.__get_file_size(output_file)
           if size > max_output_size and job_id then
             vim.fn.jobstop(job_id)
-            print "[Suno] Memory overflow!, looks like your program is in an infite loop printing stuff :|"
+            print "[suno] Memory overflow!, looks like your program is in an infite loop printing stuff :|"
           end
         end
       end,
@@ -146,15 +141,15 @@ M.__handle_cpp = function()
       end,
       on_exit = function(_, exit_code, _)
         if exit_code == 124 then
-          print "[Suno] Execution timeout! Check if your code has any infinite loop :|"
+          print "[suno] Execution timeout! Check if your code has any infinite loop :|"
         elseif exit_code == 137 then
-          print "[Suno] I have killed the watch process due to excessive output."
+          print "[suno] I have killed the watch process due to excessive output."
         end
       end,
     })
 
     -- Print the final message
-    print "[Suno] Done. OK :)"
+    print "[suno] Done. OK :)"
   end
 
   vim.api.nvim_create_autocmd("BufWritePost", {
@@ -166,42 +161,37 @@ end
 
 -- Internal main function
 M.__main = function()
-  -- Get the filetype on which the :Suno command was spawned
+  -- Get the filetype on which the :suno command was spawned
   local current_filetype = vim.bo.filetype
   -- Check if it is supported currently
   local is_current_filetype_supported = M.__is_a_supported_filetype(current_filetype)
 
   -- Now to perform some nil guards
   if current_filetype == "" then
-    print "[Suno] Can't suno an unknown filetype :("
     return
   end
 
   if not is_current_filetype_supported then
-    print("[Suno] I currently don't support " .. current_filetype .. ", Make sure to check later on :)")
     return
   end
 
-  print "[Suno] I am ready :)"
-
-  if current_filetype == "cpp" then
-    M.__handle_cpp()
-  else
-    -- TODO: Handle other filetypes
-    print("[Suno] Implementation for " ..
-      current_filetype .. " is still in progress it should be there in the later versions :P")
+  if current_filetype ~= "cpp" then
     return
   end
+
+  print "[suno] I am ready :)"
+
+  M.__handle_cpp()
 end
 
 ---Setup function as per the requirement of lazy.nvim
 M.setup = function()
   -- Make a neovim function to launch suno's main
   vim.api.nvim_create_user_command(M.__SUNO, M.__main, {
-    desc = "[Suno] Suno your current filetype!",
+    desc = "[suno] suno your current filetype!",
   })
 
-  -- Create an autocommand group for Suno
+  -- Create an autocommand group for suno
   vim.api.nvim_create_augroup(M.__SUNO, {
     clear = true,
   })
