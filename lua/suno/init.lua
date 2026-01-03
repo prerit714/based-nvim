@@ -1,8 +1,8 @@
 local M = {}
 
 -- Used constants in this file
-M.__SUNO = "suno"
-M.__CP = "cp"
+M.__SUNO = "Suno"
+M.__CP = "Cp"
 
 -- A table for supported filetypes
 M.__supported_filetypes = {
@@ -210,7 +210,7 @@ M.setup = function()
     vim.api.nvim_buf_set_lines(0, 0, -1, false, template_lines)
 
     -- Move cursor to a specific position (e.g., line 10, column 0)
-    vim.api.nvim_win_set_cursor(0, { 40, 3 })
+    vim.api.nvim_win_set_cursor(0, { 71, 1 })
   end, {
     desc = 'Populate current file with C++ template'
   })
