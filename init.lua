@@ -93,7 +93,8 @@ vim.lsp.enable({
   "biome",
   "cssls",
   "cssmodules_ls",
-  "tailwindcss"
+  "tailwindcss",
+  "lua_ls"
 })
 
 local format_local_buffer = function()
@@ -316,30 +317,6 @@ mini_files.setup({
 
 -- Bind <Leader>+e to open mini.files
 vim.keymap.set("n", "<leader>e", mini_files.open, { silent = true })
-
--- WARN: This is giving some errors in the latest build
--- I better stay careful dealing with this for now.
--- Maybe in later versions devs will make it work better
----@diagnostic disable-next-line: unused-local
-local lsp_config = require("lspconfig")
-
--- Let lua_ls know about neovim globals
-vim.lsp.config.lua_ls = {
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { "vim", "require" },
-      },
-      workspace = {
-        library = vim.api.nvim_get_runtime_file("", true),
-        checkThirdParty = false,
-      },
-      telemetry = {
-        enable = false,
-      },
-    },
-  },
-}
 
 -- Toggle inlay hints <Leader>+ih
 vim.keymap.set("n", "<leader>ih", function()

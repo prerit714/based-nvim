@@ -1,7 +1,8 @@
 local M = {}
 
--- Most used constant in this file
+-- Used constants in this file
 M.__SUNO = "Suno"
+M.__CP = "Cp"
 
 -- A table for supported filetypes
 M.__supported_filetypes = {
@@ -101,16 +102,28 @@ M.__handle_cpp = function()
     M.__create_file_if_it_does_not_exist(input_file)
     M.__create_file_if_it_does_not_exist(output_file)
 
-    -- Define the command to build and run the c++ file
-    local build_command = string.format(
-      "g++ -std=c++23 -ggdb -O0 -Wall -Weffc++ -Wextra -Wconversion -Wsign-conversion -Werror -pedantic-errors -g %s -o %s",
-      current_file,
-      temp_exec
-    )
-    local run_command = string.format("./%s < %s > %s 2>&1", temp_exec, input_file, output_file)
+    -- NOTE: Turn this on for strict mode compilation
+    local strict_mode = false
+    local build_command = ""
+
+    if strict_mode then
+      build_command = string.format(
+        "g++ -std=c++23 -ggdb -O2 -Wall -Weffc++ -Wextra -Wconversion -Wsign-conversion -Werror -pedantic-errors -g %s -o %s",
+        current_file,
+        temp_exec
+      )
+    else
+      build_command = string.format(
+        "g++ -std=c++23 -O2 -Wall %s -o %s",
+        current_file,
+        temp_exec
+      )
+    end
 
     -- Execute the build and run command
     vim.fn.system(build_command)
+
+    local run_command = string.format("./%s < %s > %s 2>&1", temp_exec, input_file, output_file)
 
     -- Start running the program and monitor the output size
     local job_id = nil
@@ -175,7 +188,8 @@ M.__main = function()
     M.__handle_cpp()
   else
     -- TODO: Handle other filetypes
-    print("[Suno] Implementation for " .. current_filetype .. " is still in progress it should be there in the later versions :P")
+    print("[Suno] Implementation for " ..
+      current_filetype .. " is still in progress it should be there in the later versions :P")
     return
   end
 end
@@ -190,6 +204,25 @@ M.setup = function()
   -- Create an autocommand group for Suno
   vim.api.nvim_create_augroup(M.__SUNO, {
     clear = true,
+  })
+
+  -- Create an autocommand for CP
+  vim.api.nvim_create_user_command(M.__CP, function()
+    -- Get the directory where this init.lua file is located
+    local source = debug.getinfo(1, "S").source:sub(2)
+    local plugin_dir = vim.fn.fnamemodify(source, ':h')
+    local template_path = plugin_dir .. '/cpp_template.cpp'
+
+    -- Read the template file
+    local template_lines = vim.fn.readfile(template_path)
+
+    -- Replace current buffer content with template
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, template_lines)
+
+    -- Move cursor to a specific position (e.g., line 10, column 0)
+    vim.api.nvim_win_set_cursor(0, { 40, 3 })
+  end, {
+    desc = 'Populate current file with C++ template'
   })
 end
 
