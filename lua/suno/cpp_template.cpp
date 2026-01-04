@@ -11,7 +11,9 @@ using pll = pair<long long, long long>;
 constexpr int inf = 1e9;
 constexpr int max_n = 1e5 + 5;
 constexpr int mod = 1e9 + 7;
+constexpr char NL{'\n'};
 
+#define NO_BENCHMARK
 #define F first
 #define S second
 #define PB push_back
@@ -74,6 +76,12 @@ void solve() {
 
 int main() {
   FASTIO;
-  timed({ solve(); });
+#ifdef NO_BENCHMARK
+  solve();
+#endif
+
+#ifndef NO_BENCHMARK
+  timed(solve());
+#endif
   return EXIT_SUCCESS;
 }

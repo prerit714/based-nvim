@@ -210,7 +210,7 @@ M.setup = function()
     vim.api.nvim_buf_set_lines(0, 0, -1, false, template_lines)
 
     -- Move cursor to a specific position (e.g., line 10, column 0)
-    vim.api.nvim_win_set_cursor(0, { 71, 1 })
+    vim.api.nvim_win_set_cursor(0, { 73, 1 })
   end, {
     desc = 'Populate current file with C++ template'
   })
