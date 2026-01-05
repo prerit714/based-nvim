@@ -195,25 +195,6 @@ M.setup = function()
   vim.api.nvim_create_augroup(M.__SUNO, {
     clear = true,
   })
-
-  -- Create an autocommand for CP
-  vim.api.nvim_create_user_command(M.__CP, function()
-    -- Get the directory where this init.lua file is located
-    local source = debug.getinfo(1, "S").source:sub(2)
-    local plugin_dir = vim.fn.fnamemodify(source, ':h')
-    local template_path = plugin_dir .. '/cpp_template.cpp'
-
-    -- Read the template file
-    local template_lines = vim.fn.readfile(template_path)
-
-    -- Replace current buffer content with template
-    vim.api.nvim_buf_set_lines(0, 0, -1, false, template_lines)
-
-    -- Move cursor to a specific position (e.g., line 10, column 0)
-    vim.api.nvim_win_set_cursor(0, { 73, 1 })
-  end, {
-    desc = 'Populate current file with C++ template'
-  })
 end
 
 return M
