@@ -47,15 +47,10 @@ vim.pack.add({
     version = "dev-1"
   },
   { src = "https://github.com/mason-org/mason.nvim" },
-  {
-    src = "https://github.com/MeanderingProgrammer/render-markdown.nvim",
-  },
-  {
-    src = "https://github.com/j-hui/fidget.nvim",
-  },
-  {
-    src = "https://github.com/prerit714/cp.nvim",
-  },
+  { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
+  { src = "https://github.com/j-hui/fidget.nvim" },
+  { src = "https://github.com/prerit714/cp.nvim" },
+  { src = "https://github.com/prerit714/suno.nvim" },
 })
 
 -- Show LSP status
@@ -253,8 +248,8 @@ local filetype_settings = {
   -- Rust (4 spaces)
   rust = { expandtab = true, shiftwidth = 4, tabstop = 4, softtabstop = 4 },
 
-  -- Java (4 spaces)
-  java = { expandtab = true, shiftwidth = 4, tabstop = 4, softtabstop = 4 },
+  -- Java (2 spaces)
+  java = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
 
   -- Shell scripts (2 spaces)
   sh = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
@@ -343,3 +338,15 @@ end, { silent = true })
 -- My cp templates
 local cp = require("cp")
 cp.setup()
+
+-- My suno config
+local suno = require("suno")
+suno.setup()
+
+-- NOTE: Disable copilot on startup
+vim.api.nvim_create_autocmd("VimEnter", {
+  pattern = "*",
+  callback = function()
+    vim.cmd("Copilot disable")
+  end,
+})
