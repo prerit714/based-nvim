@@ -53,6 +53,9 @@ vim.pack.add({
   {
     src = "https://github.com/j-hui/fidget.nvim",
   },
+  {
+    src = "https://github.com/prerit714/cp.nvim",
+  },
 })
 
 -- Show LSP status
@@ -94,7 +97,8 @@ vim.lsp.enable({
   "cssls",
   "cssmodules_ls",
   "tailwindcss",
-  "lua_ls"
+  "lua_ls",
+  "jdtls"
 })
 
 local format_local_buffer = function()
@@ -336,6 +340,6 @@ vim.keymap.set("n", "<leader>ih", function()
   end
 end, { silent = true })
 
--- Import suno
-local suno = require("suno")
-suno.setup()
+-- My cp templates
+local cp = require("cp")
+cp.setup()
