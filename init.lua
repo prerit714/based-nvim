@@ -227,7 +227,8 @@ local filetype_settings = {
   typescriptreact = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
   html = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
   css = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
-  scss = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 }, json = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
+  scss = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
+  json = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
   yaml = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
   vue = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
   svelte = { expandtab = true, shiftwidth = 2, tabstop = 2, softtabstop = 2 },
@@ -339,10 +340,6 @@ end, { silent = true })
 local cp = require("cp")
 cp.setup()
 
--- My suno config
-local suno = require("suno")
-suno.setup()
-
 -- NOTE: Disable copilot on startup
 vim.api.nvim_create_autocmd("VimEnter", {
   pattern = "*",
@@ -350,3 +347,24 @@ vim.api.nvim_create_autocmd("VimEnter", {
     vim.cmd("Copilot disable")
   end,
 })
+
+-- Compile and run C/C++ files with input from input.txt | CP
+vim.keymap.set('n', '<leader>r', function()
+  local ft = vim.bo.filetype
+  if ft ~= 'cpp' and ft ~= 'c' then return end
+
+  local dir = vim.fn.expand('%:p:h')
+  local file = vim.fn.expand('%:t')
+  local name = vim.fn.expand('%:t:r')
+  local input = dir .. '/input.txt'
+
+  if vim.fn.filereadable(input) == 0 then
+    vim.notify('input.txt not found', vim.log.levels.ERROR)
+    return
+  end
+
+  vim.cmd('w')
+  vim.cmd('split | terminal ' .. string.format([[
+    cd %s && g++ -O2 -std=c++17 -o %s.out %s && ./%s.out < input.txt
+  ]], dir, name, file, name))
+end)
