@@ -348,12 +348,12 @@ vim.api.nvim_create_autocmd("VimEnter", {
   end,
 })
 
--- Compile and run C/C++ or Java files with input from input.txt | CP
-vim.keymap.set('n', '<leader>r', function()
+-- Compile and run single source cpp/java file for CP
+local cp_runner = function()
   local ft = vim.bo.filetype
 
   if ft ~= "java" and ft ~= "cpp" then
-    vim.notify(string.format('[prr ...] runner not supported for %s', ft), vim.log.levels.WARN)
+    vim.notify(string.format('[cp_runner] runner not supported for %s', ft), vim.log.levels.WARN)
     return
   end
 
@@ -363,7 +363,7 @@ vim.keymap.set('n', '<leader>r', function()
   local input = dir .. '/input.txt'
 
   if vim.fn.filereadable(input) == 0 then
-    vim.notify('[prr...] input.txt not found', vim.log.levels.ERROR)
+    vim.notify('[cp_runner] input.txt not found', vim.log.levels.ERROR)
     return
   end
 
@@ -378,4 +378,20 @@ vim.keymap.set('n', '<leader>r', function()
       cd %s && javac %s && java -cp . %s < input.txt
     ]], dir, file, name))
   end
-end)
+end
+
+-- Compile and run C/C++ or Java files with input from input.txt | CP
+vim.keymap.set('n', '<leader>r', cp_runner)
+
+-- To toggle word wrap
+local toggle_wrap = function()
+  vim.wo.wrap = not vim.wo.wrap
+  if vim.wo.wrap then
+    vim.notify("[toggle_wrap] word wrap enabled", vim.log.levels.WARN)
+  else
+    vim.notify("[toggle_wrap] word wrap disabled", vim.log.levels.WARN)
+  end
+end
+
+-- Add a command to toggle word wrap with leader + w
+vim.keymap.set("n", "<leader>w", toggle_wrap)
