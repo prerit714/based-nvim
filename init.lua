@@ -353,7 +353,7 @@ local cp_runner = function()
   local ft = vim.bo.filetype
 
   if ft ~= "java" and ft ~= "cpp" then
-    vim.notify(string.format('[cp_runner] runner not supported for %s', ft), vim.log.levels.WARN)
+    vim.notify(string.format('[cp_runner] runner not supported for %s', ft), vim.log.levels.ERROR)
     return
   end
 
