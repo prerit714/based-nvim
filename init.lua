@@ -348,10 +348,14 @@ vim.api.nvim_create_autocmd("VimEnter", {
   end,
 })
 
--- Compile and run C/C++ files with input from input.txt | CP
+-- Compile and run C/C++ or Java files with input from input.txt | CP
 vim.keymap.set('n', '<leader>r', function()
   local ft = vim.bo.filetype
-  if ft ~= 'cpp' and ft ~= 'c' then return end
+
+  if ft ~= "java" and ft ~= "cpp" then
+    vim.notify(string.format('[prr ...] runner not supported for %s', ft), vim.log.levels.WARN)
+    return
+  end
 
   local dir = vim.fn.expand('%:p:h')
   local file = vim.fn.expand('%:t')
@@ -359,12 +363,19 @@ vim.keymap.set('n', '<leader>r', function()
   local input = dir .. '/input.txt'
 
   if vim.fn.filereadable(input) == 0 then
-    vim.notify('input.txt not found', vim.log.levels.ERROR)
+    vim.notify('[prr...] input.txt not found', vim.log.levels.ERROR)
     return
   end
 
-  vim.cmd('w')
-  vim.cmd('split | terminal ' .. string.format([[
-    cd %s && g++ -O2 -std=c++17 -o %s.out %s && ./%s.out < input.txt
-  ]], dir, name, file, name))
+  if ft == "cpp" then
+    vim.cmd('split | terminal ' .. string.format([[
+      cd %s && g++ -O2 -std=c++17 -o %s.out %s && ./%s.out < input.txt
+    ]], dir, name, file, name))
+  end
+
+  if ft == "java" then
+    vim.cmd('split | terminal ' .. string.format([[
+      cd %s && javac %s && java -cp . %s < input.txt
+    ]], dir, file, name))
+  end
 end)
