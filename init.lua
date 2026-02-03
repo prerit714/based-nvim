@@ -51,6 +51,7 @@ vim.pack.add({
   { src = "https://github.com/j-hui/fidget.nvim" },
   { src = "https://github.com/prerit714/cp.nvim" },
   { src = "https://github.com/prerit714/suno.nvim" },
+  { src = "https://github.com/nvim-treesitter/nvim-treesitter-context" },
 })
 
 -- Show LSP status
@@ -212,6 +213,23 @@ vim.treesitter.language.add("rust")
 vim.treesitter.language.add("c")
 vim.treesitter.language.add("cpp")
 vim.treesitter.language.add("java")
+
+-- Setup treesitter context
+local ts_context = require("treesitter-context")
+ts_context.setup({
+  enable = true,
+  max_lines = 3,            -- How many lines the context window should span
+  min_window_height = 0,    -- Minimum editor window height to enable context
+  line_numbers = true,
+  multiline_threshold = 20, -- Maximum number of lines to show for a single context
+  trim_scope = "outer",     -- Which context lines to discard if max_lines is exceeded
+  mode = "cursor",          -- Line used to calculate context. Choices: 'cursor', 'topline'
+  separator = nil,          -- Separator between context and content. Set to a character to use
+  zindex = 20,              -- The Z-index of the context window
+})
+
+-- Toggle treesitter context with <Leader>+tc
+vim.keymap.set("n", "<leader>tc", "<cmd>TSContext toggle<cr>", { silent = true })
 
 -- Create an autocommand group for filetype indentation
 local indent_group = vim.api.nvim_create_augroup(
